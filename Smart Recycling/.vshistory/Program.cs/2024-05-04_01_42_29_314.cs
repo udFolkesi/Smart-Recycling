@@ -6,8 +6,6 @@ using Microsoft.OpenApi.Models;
 using DAL.Contexts;
 using System.Text;
 using System.Text.Json.Serialization;
-using SmartRecyclingAPI;
-using BLL.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,7 +85,7 @@ builder.Services.AddSwaggerGen(c => {
 
 builder.Services.AddDbContext<SmartRecyclingDbContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddScoped<AuthService>();
+//builder.Services.AddScoped<OperationService>();
 
 builder.Services.AddCors(options =>
 {
