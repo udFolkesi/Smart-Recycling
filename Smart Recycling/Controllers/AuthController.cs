@@ -39,10 +39,34 @@ namespace SmartRecycling.Controllers
                 return BadRequest(new { errorText = "Invalid password." });
             }
 
+            if (!dbContext.User.FirstOrDefault(u => u.Email == email).IsEmailConfirmed)
+            {
+                return BadRequest("Email is not confirmed");
+            }
+
             return Json(authService.GetResponse(email, password, identity));
         }
 
+        [HttpPost("{id}/{code}")]
+        public async Task<IActionResult> ConfirmCode(int id, string code)
+        {
+            var user = dbContext.User.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound(); // User not found
+            }
 
+            if (user.ConfirmationCode == code)
+            {
+                user.IsEmailConfirmed = true;
+                await dbContext.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("Invalid confirmation code");
+            }
+        }
 
 
 

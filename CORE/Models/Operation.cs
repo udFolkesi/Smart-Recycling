@@ -12,6 +12,7 @@ namespace CORE.Models
     {
         public required string TrashType { get; set; }
         public int Weight { get; set; }
+        public int Volume { get; set; }
         public DateTime Time { get; set; }
 
         [ForeignKey(nameof(UserID))]

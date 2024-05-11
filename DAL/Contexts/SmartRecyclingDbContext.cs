@@ -28,11 +28,11 @@ namespace DAL.Contexts
                 .HasOne(u => u.UserStatistics)
                 .WithOne(us => us.User)
                 .HasForeignKey<UserStatistics>(us => us.Id);
-            modelBuilder
+/*            modelBuilder
                 .Entity<CollectionPoint>()
                 .HasOne(cp => cp.CollectionPointComposition)
                 .WithOne(cpc => cpc.CollectionPoint)
-                .HasForeignKey<CollectionPointComposition>(cpc => cpc.Id);
+                .HasForeignKey<CollectionPointComposition>(cpc => cpc.Id);*/
         }
     }
 }

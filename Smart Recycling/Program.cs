@@ -88,6 +88,8 @@ builder.Services.AddSwaggerGen(c => {
 builder.Services.AddDbContext<SmartRecyclingDbContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<PointStateService>();
+builder.Services.AddScoped<TransportationService>();
 
 builder.Services.AddCors(options =>
 {

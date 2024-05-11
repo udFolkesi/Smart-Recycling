@@ -12,6 +12,9 @@ namespace CORE.Models
     {
         public required string TrashType { get; set; }
         public int Weight { get; set; }
+        public string Status { get; set; }
+        //public DateTime CollectionTime { get; set; }
+        //public DateTime DeliveryTime { get; set; }
         [ForeignKey(nameof(CollectionPointID))]
         public int CollectionPointID { get; set; }
         [ForeignKey(nameof(RecyclingPointID))]

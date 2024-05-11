@@ -41,9 +41,6 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Volume")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("CollectionPoint");
@@ -52,6 +49,15 @@ namespace DAL.Migrations
             modelBuilder.Entity("CORE.Models.CollectionPointComposition", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CollectionPointID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Fullness")
                         .HasColumnType("int");
 
                     b.Property<int>("MaxVolume")
@@ -61,10 +67,15 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Volume")
+                        .HasColumnType("int");
+
                     b.Property<int>("Weight")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CollectionPointID");
 
                     b.ToTable("CollectionPointComposition");
                 });
@@ -90,6 +101,9 @@ namespace DAL.Migrations
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
+                    b.Property<int>("Volume")
+                        .HasColumnType("int");
+
                     b.Property<int>("Weight")
                         .HasColumnType("int");
 
@@ -110,6 +124,9 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -117,6 +134,9 @@ namespace DAL.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("QueuedTrash")
+                        .HasColumnType("int");
 
                     b.Property<string>("RecyclingType")
                         .IsRequired()
@@ -172,6 +192,10 @@ namespace DAL.Migrations
                     b.Property<int>("RecyclingPointID")
                         .HasColumnType("int");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TrashType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -195,6 +219,9 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConfirmationCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -243,8 +270,8 @@ namespace DAL.Migrations
             modelBuilder.Entity("CORE.Models.CollectionPointComposition", b =>
                 {
                     b.HasOne("CORE.Models.CollectionPoint", "CollectionPoint")
-                        .WithOne("CollectionPointComposition")
-                        .HasForeignKey("CORE.Models.CollectionPointComposition", "Id")
+                        .WithMany("CollectionPointComposition")
+                        .HasForeignKey("CollectionPointID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -313,8 +340,7 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("CORE.Models.CollectionPoint", b =>
                 {
-                    b.Navigation("CollectionPointComposition")
-                        .IsRequired();
+                    b.Navigation("CollectionPointComposition");
 
                     b.Navigation("Operations");
 

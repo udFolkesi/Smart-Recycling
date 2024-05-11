@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLL.Services;
 using CORE.Models;
 using DAL.Contexts;
 using Microsoft.AspNetCore.JsonPatch;
@@ -15,11 +16,13 @@ namespace SmartRecycling.Controllers
     {
         private readonly SmartRecyclingDbContext dbContext;
         private readonly IMapper _mapper;
+        private readonly PointStateService pointService;
 
-        public CollectionPointController(SmartRecyclingDbContext dbContext, IMapper mapper)
+        public CollectionPointController(SmartRecyclingDbContext dbContext, IMapper mapper, PointStateService pointService)
         {
             this.dbContext = dbContext;
             _mapper = mapper;
+            this.pointService = pointService;
         }
 
         [HttpGet]
@@ -45,6 +48,9 @@ namespace SmartRecycling.Controllers
             var collectionPointMap = _mapper.Map<CollectionPoint>(collectionPoint);
 
             await dbContext.CollectionPoint.AddAsync(collectionPointMap);
+            await dbContext.SaveChangesAsync();
+
+            await pointService.CreatePointComposition(collectionPointMap.Id); 
             await dbContext.SaveChangesAsync();
 
             return Ok(collectionPoint);

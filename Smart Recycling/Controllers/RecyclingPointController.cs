@@ -4,6 +4,7 @@ using CORE.Models;
 using DAL.Contexts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SmartRecycling.Dto;
 
 namespace SmartRecycling.Controllers
 {
@@ -37,6 +38,16 @@ namespace SmartRecycling.Controllers
             }
 
             return Ok(point);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateRecyclingPoint(RecyclingPointDto recyclingPoint)
+        {
+            var pointMap = _mapper.Map<RecyclingPoint>(recyclingPoint);
+            await dbContext.RecyclingPoint.AddAsync(pointMap);
+            await dbContext.SaveChangesAsync();
+
+            return Ok(recyclingPoint);
         }
 
         [HttpPost]

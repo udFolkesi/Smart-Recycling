@@ -15,6 +15,12 @@ namespace SmartRecycling.Controllers
         {
         }
 
+        [HttpGet]
+        public IEnumerable<Transportation> Get()
+        {
+            return dbContext.Transportation.ToList();
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateTransportation(TransportationDto transportation)
         {
