@@ -9,14 +9,15 @@ using System.Threading.Tasks;
 
 namespace CORE.Models
 {
-    public class CollectionPointComposition
+    public class CollectionPointComposition: BaseEntity
     {
-        [Key]
-        [ForeignKey(nameof(Id))]
-        public int Id { get; set; }
         public required string TrashType { get; set; }
-        public int Weight { get; set; }
-        public int MaxVolume { get; set; }
+        public int Weight { get; set; } = 0;
+        public int Volume { get; set; } = 0;
+        public int MaxVolume { get; set; } = 3;
+        public int Fullness { get; set; } = 0;
+        [ForeignKey(nameof(CollectionPointID))]
+        public int CollectionPointID { get; set; }
 
         public CollectionPoint CollectionPoint { get; set; }
     }

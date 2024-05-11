@@ -28,5 +28,14 @@ namespace SmartRecycling.Controllers
 
             return Ok(userStatistics);
         }
+
+/*        [HttpPut]
+        public async Task<IActionResult> UpdateUserStatistics(int id, UserStatistics userStatistics)
+        {
+
+            dbContext.SaveChangesAsync();
+
+            return Ok(userStatistics);
+        }*/
     }
 }

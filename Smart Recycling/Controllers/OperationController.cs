@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLL.Services;
 using CORE.Models;
 using DAL.Contexts;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +13,15 @@ namespace SmartRecycling.Controllers
     {
         private readonly SmartRecyclingDbContext dbContext;
         private readonly IMapper _mapper;
+        private readonly PointStateService pointStateService;
+        private readonly StatisticsService statisticsService;
 
-        public OperationController(SmartRecyclingDbContext dbContext, IMapper mapper)
+        public OperationController(SmartRecyclingDbContext dbContext, IMapper mapper, PointStateService pointStateService, StatisticsService statisticsService)
         {
             this.dbContext = dbContext;
             _mapper = mapper;
+            this.pointStateService = pointStateService;
+            this.statisticsService = statisticsService;
         }
 
         [HttpPost]
@@ -26,6 +31,9 @@ namespace SmartRecycling.Controllers
 
             await dbContext.Operation.AddAsync(operationrMap);
             await dbContext.SaveChangesAsync();
+
+            pointStateService.UpdateCollectionPointState(operationrMap);
+            statisticsService.UpdateUserStatistics(operationrMap);
 
             return Ok(operation);
         }

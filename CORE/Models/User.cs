@@ -15,7 +15,7 @@ namespace CORE.Models
         //public bool IsAdmin { get; set; }
         public required string Email { get; set; }
         public bool IsEmailConfirmed { get; set; } // change allocation of it
-        //public string ConfirmationCode { get; set; }
+        public string? ConfirmationCode { get; set; }
         public required string Password { get; set; }
         //public int UserStatisticsID { get; set; }
 

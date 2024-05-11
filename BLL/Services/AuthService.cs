@@ -12,12 +12,10 @@ using System.Threading.Tasks;
 
 namespace BLL.Services
 {
-    public class AuthService
+    public class AuthService: BaseService
     {
-        private SmartRecyclingDbContext dbContext;
-        public AuthService(SmartRecyclingDbContext dbContext)
+        public AuthService(SmartRecyclingDbContext smartRecyclingDbContext) : base(smartRecyclingDbContext)
         {
-            this.dbContext = dbContext;
         }
 
         public dynamic GetResponse(string email, string password, ClaimsIdentity identity)

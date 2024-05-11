@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using BLL.Services;
-using CORE.Helpers;
 using CORE.Models;
 using DAL.Contexts;
-using Microsoft.AspNetCore.Http;
+//using iTextSharp.text.pdf.qrcode;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using SmartRecycling.Dto;
+using System.Drawing;
+using QRCoder;
+using DAL;
 
 namespace SmartRecycling.Controllers
 {
@@ -60,12 +61,10 @@ namespace SmartRecycling.Controllers
 
             var userMap = _mapper.Map<User>(user);
             userMap.Password = AuthService.HashPassword(userMap.Password);
+            //userMap.ConfirmationCode = EmailSenderHelper.SendConfirmation("alexeyfromov@gmail.com", user.Password, "oleksiy.salamatov@nure.ua");
 
             await dbContext.User.AddAsync(userMap);
             await dbContext.SaveChangesAsync();
-
-            //userModel.ConfirmationCode = EmailSenderHelper.SendConfirmation("alexeyfromov@gmail.com", user.Password, "oleksiy.salamatov@nure.ua");
-            //EmailSenderHelper.SendConfirmation("alexeyfromov@gmail.com", user.Password, "oleksiy.salamatov@nure.ua");
 
             return Ok(user);
         }
@@ -113,6 +112,16 @@ namespace SmartRecycling.Controllers
             await dbContext.SaveChangesAsync();
 
             return Ok();
+        }
+
+        [HttpGet("{userId}")]
+        public ActionResult GenerateQRCode(int userId)
+        {
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode($"User Id: {userId}", QRCodeGenerator.ECCLevel.Q);
+            PngByteQRCode qrCode = new PngByteQRCode(qrCodeData);
+            byte[] qrCodeImage = qrCode.GetGraphic(20);
+            return File(qrCodeImage, "image/png");
         }
     }
 }
