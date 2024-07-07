@@ -12,7 +12,7 @@ using System.Text;
 namespace SmartRecycling.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class AuthController : Controller
     {
         private SmartRecyclingDbContext dbContext;
@@ -28,6 +28,7 @@ namespace SmartRecycling.Controllers
         {
             //EmailSenderHelper.SendConfirmation("alexeyfromov@gmail.com", /*dbContext.User.First().Password,*/ "oleksiy.salamatov@nure.ua");
 
+            //email = AuthService.HashPassword(password);
             var identity = authService.GetIdentity(email, password);
             if (identity == null)
             {

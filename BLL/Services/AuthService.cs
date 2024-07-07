@@ -1,14 +1,10 @@
 ﻿using CORE.Models;
 using DAL.Contexts;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Services
 {
@@ -42,9 +38,9 @@ namespace BLL.Services
             return response;
         }
 
-        public ClaimsIdentity GetIdentity(string email, string password)
+        public ClaimsIdentity GetIdentity(string email, string? password)
         {
-            User? user = dbContext.User.FirstOrDefault(x => x.Email == email && x.Password == password);
+            User? user = dbContext.User.FirstOrDefault(x => x.Email == email/* && x.Password == password*/);
             if (user != null)
             {
                 var claims = new List<Claim>

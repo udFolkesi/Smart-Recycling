@@ -10,7 +10,7 @@ namespace SmartRecycling.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserStatisticsController : Controller
     {
         private readonly SmartRecyclingDbContext dbContext;
@@ -18,6 +18,18 @@ namespace SmartRecycling.Controllers
         public UserStatisticsController(SmartRecyclingDbContext dbContext)
         {
             this.dbContext = dbContext;
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<int>> GetUserBonuses(int userId)
+        {
+            var user = await dbContext.UserStatistics.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                return NotFound(); // Returns a 404 response if the user is not found
+            }
+
+            return user.Bonuses;
         }
 
         [HttpPost]

@@ -16,6 +16,8 @@ namespace SmartRecycling.Helper
             CreateMap<CollectionPointDto, CollectionPoint>();
             CreateMap<CollectionPoint, CollectionPointPatchDto>();
             CreateMap<CollectionPointPatchDto, CollectionPoint>();
+            CreateMap<User, UserPatchDto>();
+            CreateMap<UserPatchDto, User>();
         }
     }
 }

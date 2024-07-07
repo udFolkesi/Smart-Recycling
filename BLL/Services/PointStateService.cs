@@ -61,5 +61,12 @@ namespace BLL.Services
 
                         }*/
         }
+
+        public async void UpdateRecyclingPointState(Transportation transportation)
+        {
+            var recyclingPoint = transportation.RecyclingPoint;
+            recyclingPoint.QueuedTrash += transportation.Weight;
+            recyclingPoint.Workload = recyclingPoint.QueuedTrash / recyclingPoint.Capacity * 100;
+        }
     }
 }

@@ -25,6 +25,15 @@ namespace SmartRecycling.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        public IEnumerable<User> GetUsers()
+        {
+            return dbContext.User
+                .Include(u => u.UserStatistics)
+                .Include(u => u.Operations)
+                .ToList();
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -61,15 +70,28 @@ namespace SmartRecycling.Controllers
 
             var userMap = _mapper.Map<User>(user);
             userMap.Password = AuthService.HashPassword(userMap.Password);
-            //userMap.ConfirmationCode = EmailSenderHelper.SendConfirmation("alexeyfromov@gmail.com", user.Password, "oleksiy.salamatov@nure.ua");
-
             await dbContext.User.AddAsync(userMap);
             await dbContext.SaveChangesAsync();
+
+            if (userMap.Role != "Admin")
+            {
+                UserStatistics userStatistics = new()
+                {
+                    Id = userMap.Id,
+                    Recycled = 0,
+                    Bonuses = 0
+                };
+
+                userMap.UserStatistics = userStatistics;
+                await dbContext.UserStatistics.AddAsync(userStatistics);
+                await dbContext.SaveChangesAsync();
+            }
+            //userMap.ConfirmationCode = EmailSenderHelper.SendConfirmation("alexeyfromov@gmail.com", user.Password, "oleksiy.salamatov@nure.ua");
 
             return Ok(user);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser([FromRoute] int id, [FromBody] UserDto updatedUserDto)
         {
             if (updatedUserDto == null || id != updatedUserDto.Id)
@@ -99,6 +121,20 @@ namespace SmartRecycling.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPatch]
+        [Route("{id:int}")]
+        public async Task<IActionResult> UpdateUsertPartially(int id, UserPatchDto user)
+        {
+            var existingUser = await dbContext.User.FindAsync(id);
+
+            _mapper.Map(user, existingUser);
+
+            dbContext.Entry(existingUser).State = EntityState.Modified;
+            await dbContext.SaveChangesAsync();
+
+            return Ok(user);
         }
 
         [HttpDelete("{id}")]

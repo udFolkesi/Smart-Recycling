@@ -9,7 +9,7 @@ namespace DAL
 {
     public class BackupManager
     {
-        public static void CreateBackup()
+        public static void CreateBackup(string backupFilePath)
         {
             string backupDirectory = @"C:\Users\USER\source\repos\Smart Recycling\DAL\Backup\";
             //string backupDirectory = @"..\DAL\Backup\";
@@ -21,10 +21,10 @@ namespace DAL
                 {
                     Directory.CreateDirectory(backupDirectory);
                 }
-
+/*
                 // Generate backup file name with timestamp
                 string backupFileName = "SmartRecycling_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".bak";
-                string backupFilePath = Path.Combine(backupDirectory, backupFileName);
+                string backupFilePath = Path.Combine(backupDirectory, backupFileName);*/
 
                 // Perform the database backup using SQL command
                 using (var connection = new SqlConnection(connectionString))

@@ -13,11 +13,13 @@ namespace CORE.Models
         public required string Name { get; set; }
         public required string Location { get; set; }
         public required string RecyclingType { get; set; }
+        // MaxProcessingTrash
         public int Capacity { get; set; }
+        public int ProcessingTrash { get; set; }
         public int QueuedTrash { get; set; }
         public int Workload { get; set; }
 
         public ICollection<Transportation> Transportation { get; set; }
-        public ICollection<RecyclingPointStatistics> RecyclingPointStatistics { get; set; }
+        public ICollection<CollectionPointStatistics> RecyclingPointStatistics { get; set; }
     }
 }

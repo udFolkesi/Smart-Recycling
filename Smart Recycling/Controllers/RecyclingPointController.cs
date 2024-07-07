@@ -50,7 +50,7 @@ namespace SmartRecycling.Controllers
             return Ok(recyclingPoint);
         }
 
-        [HttpPost]
+/*        [HttpPost]
         public async Task<IActionResult> CreateReport(RecyclingPointStatistics pointStatistics)
         {
             await dbContext.RecyclingPointStatistics.AddRangeAsync(pointStatistics);
@@ -79,6 +79,6 @@ namespace SmartRecycling.Controllers
             {
                 FileDownloadName = $"report-for:{period}.pdf"
             };
-        }
+        }*/
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLL.Services;
 using CORE.Models;
 using DAL.Contexts;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +12,13 @@ namespace SmartRecycling.Controllers
     [Route("api/[controller]/[action]")]
     public class TransportationController : BaseController
     {
+        private readonly PointStateService _pointStateService;
         public TransportationController(SmartRecyclingDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
         }
 
         [HttpGet]
-        public IEnumerable<Transportation> Get()
+        public IEnumerable<Transportation> GetTransportations()
         {
             return dbContext.Transportation.ToList();
         }
@@ -46,6 +48,12 @@ namespace SmartRecycling.Controllers
             _mapper.Map(updatedTransportationDto, existingTransportation);
 
             await dbContext.SaveChangesAsync();
+
+            var transportation = await dbContext.Transportation.FindAsync(id);
+            if (transportation.Status == "Delivered")
+            {
+                _pointStateService.UpdateRecyclingPointState(transportation);
+            }
 
             return NoContent();
         }

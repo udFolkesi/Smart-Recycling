@@ -14,12 +14,12 @@ namespace CORE.Models
         public required string Role { get; set; }
         //public bool IsAdmin { get; set; }
         public required string Email { get; set; }
-        public bool IsEmailConfirmed { get; set; } // change allocation of it
+        public bool IsEmailConfirmed { get; set; } = true; // change allocation of it
         public string? ConfirmationCode { get; set; }
         public required string Password { get; set; }
         //public int UserStatisticsID { get; set; }
 
         public UserStatistics? UserStatistics { get; set; }
-        public ICollection<Operation> Operations { get; set; }
+        public ICollection<Operation> Operations { get; } = new List<Operation>();
     }
 }

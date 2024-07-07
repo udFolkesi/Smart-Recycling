@@ -9,7 +9,7 @@ namespace SmartRecycling.Dto
         public required string TrashType { get; set; }
         public int Weight { get; set; }
         public int Volume { get; set; }
-        public DateTime Time { get; set; }
+        public DateTimeOffset Time { get; set; }
         public int UserID { get; set; }
         public int CollectionPointID { get; set; }
     }

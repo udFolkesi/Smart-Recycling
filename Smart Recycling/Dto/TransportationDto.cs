@@ -8,6 +8,7 @@ namespace SmartRecycling.Dto
     {
         public required string TrashType { get; set; }
         public int Weight { get; set; }
+        public string Status { get; set; }
         public int CollectionPointID { get; set; }
         public int RecyclingPointID { get; set; }
     }

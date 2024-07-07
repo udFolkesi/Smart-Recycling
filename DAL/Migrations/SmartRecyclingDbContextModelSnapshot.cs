@@ -80,6 +80,45 @@ namespace DAL.Migrations
                     b.ToTable("CollectionPointComposition");
                 });
 
+            modelBuilder.Entity("CORE.Models.CollectionPointStatistics", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Attendance")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Collected")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CollectionPointID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MostCollectedType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Period")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Recycled")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RecyclingPointId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollectionPointID");
+
+                    b.HasIndex("RecyclingPointId");
+
+                    b.ToTable("CollectionPointStatistics");
+                });
+
             modelBuilder.Entity("CORE.Models.Operation", b =>
                 {
                     b.Property<int>("Id")
@@ -91,8 +130,8 @@ namespace DAL.Migrations
                     b.Property<int>("CollectionPointID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Time")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("Time")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("TrashType")
                         .IsRequired()
@@ -135,6 +174,9 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProcessingTrash")
+                        .HasColumnType("int");
+
                     b.Property<int>("QueuedTrash")
                         .HasColumnType("int");
 
@@ -148,34 +190,6 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RecyclingPoint");
-                });
-
-            modelBuilder.Entity("CORE.Models.RecyclingPointStatistics", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Collected")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Period")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Recycled")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecyclingPointID")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RecyclingPointID");
-
-                    b.ToTable("RecyclingPointStatistics");
                 });
 
             modelBuilder.Entity("CORE.Models.Transportation", b =>
@@ -278,6 +292,21 @@ namespace DAL.Migrations
                     b.Navigation("CollectionPoint");
                 });
 
+            modelBuilder.Entity("CORE.Models.CollectionPointStatistics", b =>
+                {
+                    b.HasOne("CORE.Models.CollectionPoint", "CollectionPoint")
+                        .WithMany("CollectionPointStatistics")
+                        .HasForeignKey("CollectionPointID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CORE.Models.RecyclingPoint", null)
+                        .WithMany("RecyclingPointStatistics")
+                        .HasForeignKey("RecyclingPointId");
+
+                    b.Navigation("CollectionPoint");
+                });
+
             modelBuilder.Entity("CORE.Models.Operation", b =>
                 {
                     b.HasOne("CORE.Models.CollectionPoint", "CollectionPoint")
@@ -295,17 +324,6 @@ namespace DAL.Migrations
                     b.Navigation("CollectionPoint");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("CORE.Models.RecyclingPointStatistics", b =>
-                {
-                    b.HasOne("CORE.Models.RecyclingPoint", "RecyclingPoint")
-                        .WithMany("RecyclingPointStatistics")
-                        .HasForeignKey("RecyclingPointID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RecyclingPoint");
                 });
 
             modelBuilder.Entity("CORE.Models.Transportation", b =>
@@ -341,6 +359,8 @@ namespace DAL.Migrations
             modelBuilder.Entity("CORE.Models.CollectionPoint", b =>
                 {
                     b.Navigation("CollectionPointComposition");
+
+                    b.Navigation("CollectionPointStatistics");
 
                     b.Navigation("Operations");
 
